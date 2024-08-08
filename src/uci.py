@@ -1,5 +1,5 @@
 from typing import List
-from position import Piece
+from position import Piece, parse_move
 from state import State
 import numpy as np
 
@@ -42,7 +42,7 @@ def init():
             case "isready":
                 print("readyok")
             case "position":
-                position(tokens)
+                state = position(tokens)
             case "go":
                 go(tokens)
             case "stop":
@@ -55,9 +55,21 @@ def init():
                 continue
 
 
-def position(tokens: List[str]):
-    """"""
+def position(tokens: List[str]) -> State:
+    idx = None
+    try:
+        idx = tokens.index("moves")
+        state = State(" ".join(tokens[:idx]))
+        tokens = tokens[idx+1:]
 
+        while len(tokens) > 0:
+            move = parse_move(tokens.pop(0))
+            print(move)
+            # state.position = state.position.make(move)
+
+        return state
+    except ValueError:
+        return State(" ".join(tokens))
 
 def go(tokens: List[str]):
     """"""
@@ -70,10 +82,8 @@ def test(tokens: List[str], state: State):
     except IndexError:
         return
 
-    match cmd:           
+    match cmd:
         case "pos":
-            """"""
-        case "print":
             def get_piece_at_idx(idx: np.uint64) -> Piece:
                 for p in range(len(state.position.bitboards)):
                     if (state.position.bitboards[p] >> idx) & np.uint64(1):
@@ -108,7 +118,7 @@ def test(tokens: List[str], state: State):
                     case Piece.BLACK_PAWN:
                         return "p"
                     case _:
-                        return " "
+                        return "-"
 
             for y in range(8):
                 print("|", end = " ")

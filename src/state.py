@@ -7,6 +7,8 @@ class State:
 
     def __init__(self, fen: str | List[str] = START_FEN):
         if type(fen) is str:
+            if fen == "startpos":
+                fen = START_FEN
             fen = fen.split()
 
         self.position = Position(fen)

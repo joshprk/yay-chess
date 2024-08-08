@@ -37,7 +37,7 @@ class CastlingRights:
 
 
 @dataclass
-class FromMoveStr:
+class Move:
     from_idx: int
     to_idx: int
     promotion: Piece
@@ -50,12 +50,12 @@ class Position:
     ep_state: int
     halfmove: int
     fullmove: int
-    
+
     def __init__(self, fen: List[str]):
         self.bitboards = self.parse_board(fen.pop(0))
         self.side_to_move = Side.WHITE if fen.pop(0) == "w" else Side.BLACK
         self.castling = self.parse_castling(fen.pop(0))
-        
+
         ep_str = fen.pop(0)
         self.ep_state = -1 if ep_str == "-" else parse_sq(ep_str)
         self.halfmove = int(fen.pop(0))
@@ -64,11 +64,11 @@ class Position:
     def parse_board(self, board: str) -> NDArray:
         bitboards = np.array([0 for _ in range(12)], dtype=np.uint64)
 
-        idx = np.uint64(0)
+        idx = 0
         for c in board:
             if not idx < 64:
                 raise Exception("Board fen has too many characters")
-            
+
             match c:
                 case "/":
                     continue
@@ -103,7 +103,7 @@ class Position:
                         raise Exception("A digit in the board fen is not in range")
                     idx += int(c)
                     continue
-            
+
             idx += 1
 
         return bitboards
@@ -128,11 +128,14 @@ class Position:
 
         return rights
 
+    def make(self, move: Move):
+        print(move)
 
-def parse_move(self, move: str) -> FromMoveStr:
+
+def parse_move(move: str) -> Move:
     if move == "0000":
-        return FromMoveStr(-1, -1, Piece.NULL_PIECE)
-    
+        return Move(-1, -1, Piece.NULL_PIECE)
+
     from_idx = parse_sq(move[:2])
     to_idx = parse_sq(move[2:4])
     promotion = Piece.NULL_PIECE
@@ -158,8 +161,10 @@ def parse_move(self, move: str) -> FromMoveStr:
             case _:
                 raise Exception("malformed movestr")
 
-    return FromMoveStr(from_idx, to_idx, promotion)
+    return Move(from_idx, to_idx, promotion)
 
 
 def parse_sq(sq: str) -> int:
-    return (ord(sq[0].lower()) - ord('a')) + int(sq[1]) * 8
+    x = ord(sq[0].lower()) - ord("a")
+    y = (int(sq[1]) - 1)
+    return x + y * 8
