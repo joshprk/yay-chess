@@ -13,13 +13,6 @@ are essential like "position" and "go". See the TXT file
 linked below to get specific details about these commands.
 
 https://github.com/joshprk/yay-chess/blob/main/uci.txt
-
-The reason why I call it a language is because the easiest way 
-to process these commands (which come from standard input) is
-by making a parser which can understand the equivalent
-grammar. Each token is separated by ASCII whitespace, and
-for the parser to work, it needs to properly handle the
-many but tractable possible combinations of tokens.
 """
 
 
