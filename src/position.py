@@ -1,15 +1,13 @@
-from calendar import c
 from dataclasses import dataclass
-from enum import Enum, Flag
-from typing import Iterator
-from re import Match
-import re
+from enum import IntEnum, Flag
+from typing import List
+from numpy.typing import NDArray
 import numpy as np
 
 START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
 
-class Piece(Enum):
+class Piece(IntEnum):
     WHITE_KING = (0,)
     WHITE_QUEEN = (1,)
     WHITE_ROOK = (2,)
@@ -45,30 +43,25 @@ class FromMoveStr:
     promotion: Piece
 
 
-class Board:
-    bitboards: np.array[np.uint64]
+class Position:
+    bitboards: NDArray
     side_to_move: Side
     castling: CastlingRights
     ep_state: int
     halfmove: int
     fullmove: int
     
-    def __init__(self, fen: str | Iterator[Match[str]] = START_FEN):
-        if type(fen) is str:
-            fen = re.finditer(r"\S+", fen)
-        elif type(fen) is not Iterator[Match[str]]:
-            raise Exception("Invalid FEN type")
-
-        self.bitboards = self.parse_board(next(fen).string)
-        self.side_to_move = Side.WHITE if next(fen).string == "w" else Side.BLACK
-        self.castling = self.parse_castling(next(fen).string)
+    def __init__(self, fen: List[str]):
+        self.bitboards = self.parse_board(fen.pop(0))
+        self.side_to_move = Side.WHITE if fen.pop(0) == "w" else Side.BLACK
+        self.castling = self.parse_castling(fen.pop(0))
         
-        ep_str = next(fen).string
-        self.ep_state = -1 if ep_str == "-" else (ord(ep_str[0].lower()) - ord('a')) + int(ep_str[1]) * 8
-        self.halfmove = int(next(fen).string)
-        self.fullmove = int(next(fen).string)
+        ep_str = fen.pop(0)
+        self.ep_state = -1 if ep_str == "-" else parse_sq(ep_str)
+        self.halfmove = int(fen.pop(0))
+        self.fullmove = int(fen.pop(0))
 
-    def parse_board(board: str) -> np.array[np.uint64]:
+    def parse_board(self, board: str) -> NDArray:
         bitboards = np.array([0 for _ in range(64)], dtype=np.uint64)
 
         idx = 0
@@ -103,16 +96,16 @@ class Board:
                     bitboards[Piece.BLACK_BISHOP] |= 1 << idx
                 case "p":
                     bitboards[Piece.BLACK_BISHOP] |= 1 << idx
-                case c.isdigit():
-                    if not 0 < int(c) <= 8:
+                case c:
+                    if not c.isdigit():
+                        raise Exception("Malformed board fen")
+                    elif not 0 < int(c) <= 8:
                         raise Exception("A digit in the board fen is not in range")
-                    idx += c
-                case _:
-                    raise Exception("Malformed board fen")
+                    idx += int(c)
 
         return bitboards
 
-    def parse_castling(castles: str) -> CastlingRights:
+    def parse_castling(self, castles: str) -> CastlingRights:
         rights = CastlingRights(False, False, False, False)
 
         for c in castles:
@@ -133,17 +126,12 @@ class Board:
         return rights
 
 
-def parse_move(move: str) -> FromMoveStr:
+def parse_move(self, move: str) -> FromMoveStr:
     if move == "0000":
         return FromMoveStr(-1, -1, Piece.NULL_PIECE)
-
-    from_x = ord(move[0].lower()) - ord('a')
-    from_y = int(move[1])
-    to_x = ord(move[2].lower()) - ord('a')
-    to_y = int(move[3])
-
-    from_idx = from_x + from_y * 8
-    to_idx = to_x + to_y * 8
+    
+    from_idx = parse_sq(move[:2])
+    to_idx = parse_sq(move[2:4])
     promotion = Piece.NULL_PIECE
 
     if len(move) > 4:
@@ -168,3 +156,7 @@ def parse_move(move: str) -> FromMoveStr:
                 raise Exception("malformed movestr")
 
     return FromMoveStr(from_idx, to_idx, promotion)
+
+
+def parse_sq(sq: str) -> int:
+    return (ord(sq[0].lower()) - ord('a')) + int(sq[1]) * 8
