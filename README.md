@@ -12,9 +12,9 @@ All the comics in this README.md are by [xkcd.com.](https://xkcd.com) They make 
 
 > Karpov's construction of a series of increasingly large rice cookers led to a protracted deadlock, but exponential growth won in the end. - [#2936](https://xkcd.com/2936/)
 
-If you want a reason for making your own chess engine, I'd argue it helped me personally learn how to get started in managing a large codebase with multiple moving parts that require good design to not mess up other parts of the codebase. It was also a way to apply some cool techniques I learnt in school that have applications in the real world, like bitmasking, hashing algorithms, search algorithms, reading challenging papers to implement ideas from academia, machine learning, good data structure design, and so much more.
+If you want a reason for making your own chess engine, I'd argue it helped me personally learn how to get started in managing code with multiple moving parts that require good design to not mess up other parts of the code. For example, the choices you make in representing your board affects how fast your search is because there may be better move generation techniques for a specific board representation. It was also a way to apply some cool techniques I learnt in school that have applications in the real world, like bitmasking, hashing algorithms, search algorithms, reading challenging papers to implement ideas from academia, machine learning, good data structure design, and so much more.
 
-The original is lost to time because I accidentally erased the copy while resetting my PC, but the good thing is that chess programming is a very neat topic. If you want a more in-depth explanation, visit the wiki linked above--the brillant and generous people who wrote it will be able to explain topics in much more accuracy and depth than I can. If you want a simple digest of chess engine anatomy for getting started, keep reading!
+The original is lost to time because I accidentally erased the copy while resetting my PC, but the good thing is that chess programming is a very neat topic that has good documentation and a sense of modularity. If you want a more in-depth explanation, visit the wiki linked above--the brillant and generous people who wrote it will be able to explain topics in much more accuracy and depth than I can. If you want a simple digest of chess engine anatomy for getting started, keep reading!
 
 There are generally three separate parts of finding a move like a chess engine:
 
@@ -25,8 +25,6 @@ There are generally three separate parts of finding a move like a chess engine:
 2. **Search**: How do we search through all the different possible combinations of moves that make a chess game? How should we distribute the limited computing power we have to search these combinations?
 
 3. **Evaluation**: What makes a chess position winning for one side? How do we assign scores to positions so we know which moves to suggest and which moves to ignore?
-
-Let's start by breaking down each of these topics one by one!
 
 ## Board Representation
 
