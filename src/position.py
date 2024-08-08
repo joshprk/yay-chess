@@ -62,13 +62,13 @@ class Position:
         self.fullmove = int(fen.pop(0))
 
     def parse_board(self, board: str) -> NDArray:
-        bitboards = np.array([0 for _ in range(64)], dtype=np.uint64)
+        bitboards = np.array([0 for _ in range(12)], dtype=np.uint64)
 
-        idx = 0
+        idx = np.uint64(0)
         for c in board:
             if not idx < 64:
                 raise Exception("Board fen has too many characters")
-
+            
             match c:
                 case "/":
                     continue
@@ -95,13 +95,16 @@ class Position:
                 case "b":
                     bitboards[Piece.BLACK_BISHOP] |= 1 << idx
                 case "p":
-                    bitboards[Piece.BLACK_BISHOP] |= 1 << idx
+                    bitboards[Piece.BLACK_PAWN] |= 1 << idx
                 case c:
                     if not c.isdigit():
                         raise Exception("Malformed board fen")
                     elif not 0 < int(c) <= 8:
                         raise Exception("A digit in the board fen is not in range")
                     idx += int(c)
+                    continue
+            
+            idx += 1
 
         return bitboards
 
