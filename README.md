@@ -16,7 +16,7 @@ If you want a reason for making your own chess engine, I'd argue it helped me pe
 
 The original is lost to time because I accidentally erased the copy while resetting my PC, but the good thing is that chess programming is a very neat topic that has good documentation and a sense of modularity. If you want a more in-depth explanation, visit the wiki linked above--the brillant and generous people who wrote it will be able to explain topics in much more accuracy and depth than I can. If you want a simple digest of chess engine anatomy for getting started, keep reading!
 
-There are generally three separate parts of finding a move like a chess engine:
+These are the three parts that make up this chess engine:
 
 1. **Board Representation**: Computers only known binary encodings of things, how do we represent all the intricacies of a position--where the pieces are, if we can castle, who's move is it? More importantly, how do we make it efficient to store millions of these positions in working memory? How can we implement representations that make other parts of the chess engine easier, like generating moves or assigning scores to positions?
 
