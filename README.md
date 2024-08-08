@@ -1,8 +1,10 @@
 # yay! chess
 
+### NOTE: This repository is not finished. I'll try making progress on finishing this whenever I have time between things.
+
 This is a recreation of a simple but interesting chess engine I made in my junior year of college for a college presentation. It's named "yay!" because that's how I felt when I wrote my first chess engine. It's not nearly as powerful as the best chess engines in the world and I've learned a lot more since I first implemented the ideas in this chess engine, but it has some interesting algorithms that I found really interesting and loved implementing and talking about. This project would have been impossible without the [Chess Programming Wiki](https://chessprogramming.org). Feel free to use any of this code in your own engine for prototyping or for learning, it's MIT licensed.
 
-Please make an issue if you see anything that may be inaccurate.
+Please make an issue if you see anything that may be inaccurate. Chess engines are just a hobby I enjoy exploring--so as an amateur, I might be wrong on some things.
 
 All the comics in this README.md are by [xkcd.com.](https://xkcd.com) They make pretty good comics. For example, here's one:
 
@@ -12,7 +14,7 @@ All the comics in this README.md are by [xkcd.com.](https://xkcd.com) They make 
 
 If you want a reason for making your own chess engine, I'd argue that it's one of the best ways to get started in managing a large codebase with multiple moving parts that require good design to not mess up other parts of the codebase. It's also an introduction to some cool techniques that have applications in the real world, like bitmasking, hashing algorithms, search algorithms, reading challenging papers to implement ideas from academia, machine learning, good data structure design, and so much more. There's no shame in copy and pasting code as long as you take the time to read, understand, and make it your own. A lot of chess engines online have very striking similarities to Stockfish...
 
-The original is lost to time because I accidentally erased the copy while resetting my PC, but the good thing is that chess programming is a very neat topic. If you want a more in-depth explanation, visit the wiki linked above--the brillant and generous people who wrote it will be able to explain topics in much more depth than I can. If you want a simple digest of chess engine anatomy for getting started, keep reading!
+The original is lost to time because I accidentally erased the copy while resetting my PC, but the good thing is that chess programming is a very neat topic. If you want a more in-depth explanation, visit the wiki linked above--the brillant and generous people who wrote it will be able to explain topics in much more accuracy and depth than I can. If you want a simple digest of chess engine anatomy for getting started, keep reading!
 
 There are generally three separate parts of finding a move like a chess engine:
 
