@@ -139,13 +139,14 @@ bitboards = \
     of length 12, where the first 6 indices refer to the occupancies
     of the six white pieces.
 
-# initialize a zero unsigned 64-bit integer
+# Initialize a zero unsigned 64-bit integer
 white_occupancies = np.uint64(0)
 
 # Find the bitwise OR of all the bitboards.
 # In other words, if a 1-bit exists on any
-# of the 6 piece bitboards for white, set it
-# to a 1-bit on the occupancy bitboard.
+# of the 6 piece bitboards for white, set the
+# corresponding bit on the occupancy bitboard
+# to from a 0-bit to a 1-bit.
 for i in range(0, 6):
     white_occupancies |= bitboards[i]
 
@@ -168,7 +169,7 @@ Output:
 
 <img src="xkcd/2465.png" align="right" width="330px">
 
-With a mailbox approach, we'd need to iterate through all 64 bytes of a mailbox minimum, and see if those bytes are in the range of our white piece enums. On the other hand, the bitboard approach leverages specific CPU instructions implemented at the low-level for the explicit purpose of making calculations fast. 
+With a mailbox approach, we'd need to iterate through all 64 bytes of a mailbox minimum, and see if those bytes are in the range of our white piece enums. On the other hand, the bitboard approach leverages specific CPU instructions implemented at the low-level for the explicit purpose of making calculations fast--see stuff like x86 BMI2 to get a feel for what CPU architectures offer to optimize bitwise manipulation.
 
 What about knights and king moves? On mailbox approaches, we'd need to dynamically calculate the indices for the moves that a knight can do. For a bitboard approach, we can initialize a array of unsigned 64-bit integers with a length of 64 on startup, where each index represents a square. A knight, when not blocked by any friendly pieces, can only make one set of moves for a given square. When we need to generate moves for a knight, just look up the square in the lookup table, calculate the bitwise AND between the lookup table and the negation of the friendly side's occupancy bitboard, and then extract the bits as possible moves for that given knight.
 
