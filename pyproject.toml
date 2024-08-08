@@ -5,7 +5,10 @@ description = "A simple Python chess engine with interesting algorithms"
 authors = [
     {name = "Joshua Park", email = "joshuprk@gmail.com"},
 ]
-dependencies = []
+dependencies = [
+    "numpy>=2.0.1",
+    "torch>=2.4.0",
+]
 requires-python = "==3.12.*"
 readme = "README.md"
 license = {text = "MIT"}
